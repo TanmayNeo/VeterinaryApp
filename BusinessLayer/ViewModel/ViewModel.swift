@@ -96,21 +96,21 @@ class ViewModel: IViewModel {
                            "Su": "Sunday"]
         
         guard let components = configResponse?.settings?.workHours?.components(separatedBy: " "),
-              components.count > 3 else { return "Work hours has ended. Please contact us again on the next wor day"}
+              components.count > 3 else { return StringConstants.outTimeString}
         
         let daysString = components[0]
         let startTime = components[1]
         let endTime = components[3]
         
         let daysArray = daysString.components(separatedBy: "-")
-        guard daysArray.count == 2 else { return "Work hours has ended. Please contact us again on the next wor day"}
+        guard daysArray.count == 2 else { return StringConstants.outTimeString}
         
         var formattedDays = ""
         for day in daysArray {
             if let fullName = daysMapping[day] {
                 formattedDays += fullName + " - "
             } else {
-                return "Work hours has ended. Please contact us again on the next wor day"
+                return StringConstants.outTimeString
             }
         }
         
@@ -120,7 +120,7 @@ class ViewModel: IViewModel {
         let upperbound = dayComponents[1]
         let weekdays = Calendar.current.weekdaySymbols
         guard let startIndex = weekdays.firstIndex(of: lowerbound),
-              let endIndex = weekdays.firstIndex(of: upperbound) else {return "Work hours has ended. Please contact us again on the next wor day"}
+              let endIndex = weekdays.firstIndex(of: upperbound) else {return StringConstants.outTimeString}
         let activeDays = weekdays[startIndex...endIndex]
         let currentDay = Calendar.current.component(.weekday, from: Date())
 
@@ -129,10 +129,10 @@ class ViewModel: IViewModel {
             let startHrs = Int(startTime.components(separatedBy: ":").first ?? "") ?? 0
             let endHrs = Int(endTime.components(separatedBy: ":").first ?? "") ?? 0
             let currentHr = Calendar.current.component(.hour, from: Date())
-            return (currentHr > startHrs && currentHr < endHrs) ? "Thank you for getting in touch with us. We’ll get back" : "Work hours has ended. Please contact us again on the next wor day"
+            return (currentHr >= startHrs && currentHr <= endHrs) ? StringConstants.inTimeString : StringConstants.outTimeString
             
         } else {
-            return "Work hours has ended. Please contact us again on the next wor day"
+            return StringConstants.outTimeString
         }
     }
 
