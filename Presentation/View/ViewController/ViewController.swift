@@ -114,5 +114,6 @@ extension ViewController: ClinicHeaderViewDelegate {
     private func showWorkHoursAlert() {
 
         showAlert(title: "VeterinaryApp", message: viewModel.formatWorkHours())
+        
     }
 }
